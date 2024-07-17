@@ -49,9 +49,24 @@ app.get("/api/wx_openid", async (req, res) => {
   }
 });
 
+
+app.all('/wx-text', async (req, res) => {
+  console.log('消息推送', req.body)
+
+  const appid = req.headers['x-wx-from-appid'] || ''
+  const { ToUserName, FromUserName, MsgType, Content, CreateTime } = req.body
+  console.log('推送接收的账号', ToUserName, '创建时间', CreateTime)
+
+  res.send({
+    code: 0,
+    data: {},
+  });
+
+})
+
 const port = process.env.PORT || 80;
 
-async function bootstrap() {
+async function bootstrap () {
   await initDB();
   app.listen(port, () => {
     console.log("启动成功", port);
