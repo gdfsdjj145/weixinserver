@@ -118,7 +118,13 @@ const getQrCode = (ticket) => {
 app.get('/api/getWxQrCode', async (req, res) => {
   const { ticket } = await getTicket()
   const qrcode = await getQrCode(ticket)
-  res.send(qrcode)
+  res.send({
+    code: 0,
+    data: {
+      ticket,
+      qrcode
+    }
+  })
 })
 
 const port = process.env.PORT || 80;
