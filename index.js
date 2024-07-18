@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const request = require('request')
+import { v4 as uuid } from 'uuid';
 const bodyParser = require('body-parser')
 const { init: initDB, Counter } = require("./db");
 
@@ -80,15 +81,23 @@ app.all('/wx-text', async (req, res) => {
 })
 
 app.get('/api/getWxQrCode', async (req, res) => {
+  const token = uuid();
   request({
     method: 'POST',
     url: 'http://api.weixin.qq.com/cgi-bin/qrcode/create',
-    body: JSON.stringify({ "action_name": "QR_LIMIT_SCENE", "action_info": { "scene": { "scene_id": 666, "scene_str": "登录" } } })
+    body: JSON.stringify({ "action_name": "QR_SCENE", "action_info": { "scene": { "scene_id": 666 } } })
   }, function (error, response) {
     if (error) {
       console.log('接口错误', error)
     } else {
       console.log('接口内容', response.body)
+      res.send({
+        code: 0,
+        data: {
+          ...response.body,
+          uuid: token
+        }
+      })
     }
   })
 })
