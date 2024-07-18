@@ -102,14 +102,14 @@ const getQrCode = (ticket) => {
   return new Promise((resolve, reject) => {
     request({
       method: 'GET',
-      url: `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${urlencoded(ticket)}`,
+      url: `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${ticket}`,
       encoding: 'base64'
-
     }, function (error, response) {
       if (error) {
         console.log('接口错误', error)
         reject(error)
       } else {
+        console.log('接口内容', response.body)
         resolve(response.body)
       }
     })
