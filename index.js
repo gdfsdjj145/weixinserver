@@ -123,7 +123,7 @@ app.get('/api/getWxQrCode', async (req, res) => {
     code: 0,
     data: {
       ticket,
-      qrcode
+      qrcode: `data:image/jpeg;base64,${qrcode}`
     }
   })
 })
