@@ -76,27 +76,49 @@ app.all('/wx-text', async (req, res) => {
     code: 0,
     data: {},
   });
-
 })
 
-app.get('/api/getWxQrCode', async (req, res) => {
-  request({
-    method: 'POST',
-    url: 'http://api.weixin.qq.com/cgi-bin/qrcode/create',
-    body: JSON.stringify({ "action_name": "QR_SCENE", "action_info": { "scene": { "scene_id": 666 } } })
-  }, function (error, response) {
-    if (error) {
-      console.log('接口错误', error, '===')
-    } else {
-      console.log('接口内容', response.body)
-      res.send({
-        code: 0,
-        data: {
+const getTicket = () => {
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'POST',
+      url: 'http://api.weixin.qq.com/cgi-bin/qrcode/create',
+      body: JSON.stringify({ "action_name": "QR_SCENE", "action_info": { "scene": { "scene_id": 666 } } })
+    }, function (error, response) {
+      if (error) {
+        console.log('接口错误', error)
+        reject(error)
+      } else {
+        console.log('接口内容', response.body)
+        resolve({
           ...JSON.parse(response.body)
-        }
-      })
-    }
+        })
+      }
+    })
   })
+}
+
+const getQrCode = (ticket) => {
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'GET',
+      url: `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${ticket}`
+    }, function (error, response) {
+      if (error) {
+        console.log('接口错误', error)
+        reject(error)
+      } else {
+        console.log('接口内容', response.body)
+        resolve(response.body)
+      }
+    })
+  })
+}
+
+app.get('/api/getWxQrCode', async (req, res) => {
+  const { ticket } = await getTicket()
+  const qrcode = await getQrCode(ticket)
+  res.send(qrcode)
 })
 
 const port = process.env.PORT || 80;
