@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const request = require('request')
-import { v4 as uuid } from 'uuid';
 const bodyParser = require('body-parser')
 const { init: initDB, Counter } = require("./db");
 
@@ -81,7 +80,6 @@ app.all('/wx-text', async (req, res) => {
 })
 
 app.get('/api/getWxQrCode', async (req, res) => {
-  const token = uuid();
   request({
     method: 'POST',
     url: 'http://api.weixin.qq.com/cgi-bin/qrcode/create',
@@ -94,8 +92,7 @@ app.get('/api/getWxQrCode', async (req, res) => {
       res.send({
         code: 0,
         data: {
-          ...response.body,
-          uuid: token
+          ...response.body
         }
       })
     }
