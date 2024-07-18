@@ -88,7 +88,7 @@ app.get('/api/getWxQrCode', async (req, res) => {
     body: JSON.stringify({ "action_name": "QR_SCENE", "action_info": { "scene": { "scene_id": 666 } } })
   }, function (error, response) {
     if (error) {
-      console.log('接口错误', error)
+      console.log('接口错误', error, '===')
     } else {
       console.log('接口内容', response.body)
       res.send({
