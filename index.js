@@ -92,7 +92,7 @@ app.get('/api/getWxQrCode', async (req, res) => {
       res.send({
         code: 0,
         data: {
-          ...response.body
+          ...JSON.parse(response.body)
         }
       })
     }
