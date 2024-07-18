@@ -109,7 +109,9 @@ const getQrCode = (ticket) => {
         reject(error)
       } else {
         console.log('接口内容', response.body)
-        resolve(response.body)
+        const buff = Buffer.from(response.body, 'utf-8')
+        const base64 = buff.toString('base64')
+        resolve(`data:image/jpeg;base64,${base64}`)
       }
     })
   })
