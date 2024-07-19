@@ -89,7 +89,6 @@ const getTicket = () => {
         console.log('接口错误', error)
         reject(error)
       } else {
-        console.log('接口内容', response.body)
         resolve({
           ...JSON.parse(response.body)
         })
@@ -109,7 +108,6 @@ const getQrCode = (ticket) => {
         console.log('接口错误', error)
         reject(error)
       } else {
-        console.log('接口内容', response.body)
         resolve(response.body)
       }
     })
