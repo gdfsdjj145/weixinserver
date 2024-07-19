@@ -60,14 +60,41 @@ app.all('/wx-text', async (req, res) => {
   console.log('消息推送', req.body)
 
   const appid = req.headers['x-wx-from-appid'] || ''
-  const { ToUserName, FromUserName, MsgType, Content, CreateTime, Event, EventKey } = req.body
+  const { ToUserName, FromUserName, MsgType, Content, CreateTime, Event, EventKey, Ticket } = req.body
   console.log('推送接收的账号', ToUserName, '创建时间', CreateTime)
 
   if (MsgType === 'event') {
     if (Event === 'subscribe' || Event === 'SCAN') {
       // 登录扫码
       if (EventKey === '666') {
-
+        request({
+          method: 'POST',
+          url: 'https://www.wefight.cn/api/wx/code',
+          body: JSON.stringify({
+            ticket: Ticket,
+            openId: FromUserName,
+            createTime: CreateTime
+          })
+        }, function (error, response) {
+          if (error) {
+            console.log('接口错误', error)
+            res.send({
+              code: 500,
+              data: {},
+              msg: '接口报错'
+            })
+          } else {
+            res.send(`
+              <xml>
+                <ToUserName><![CDATA[${ToUserName}]]></ToUserName>
+                <FromUserName><![CDATA[${FromUserName}]]></FromUserName>
+                <CreateTime>1${CreateTime}</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[登录成功]]></Content>
+              </xml>
+              `)
+          }
+        })
       }
     }
   }
