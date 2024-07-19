@@ -75,24 +75,15 @@ app.all('/wx-text', async (req, res) => {
             openId: FromUserName,
             createTime: CreateTime
           })
-        }, function (error, response) {
-          if (error) {
-            console.log('接口错误', error)
-            res.send({
-              code: 500,
-              data: {},
-              msg: '接口报错'
-            })
-          } else {
-            sendmess(appid, {
-              touser: FromUserName,
-              msgtype: 'text',
-              text: {
-                content: '登录成功'
-              }
-            })
-            res.send('success')
-          }
+        }, async (error, response) => {
+          await sendmess(appid, {
+            touser: FromUserName,
+            msgtype: 'text',
+            text: {
+              content: '登录成功'
+            }
+          })
+          res.send('success')
         })
       }
     }
