@@ -101,7 +101,7 @@ const getQrCode = (ticket) => {
   return new Promise((resolve, reject) => {
     request({
       method: 'GET',
-      url: `https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${ticket}`,
+      url: `http://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=${ticket}`,
       encoding: 'base64'
     }, function (error, response) {
       if (error) {
@@ -122,6 +122,30 @@ app.get('/api/getWxQrCode', async (req, res) => {
     data: {
       ticket,
       qrcode: `data:image/jpeg;base64,${qrcode}`
+    }
+  })
+})
+
+app.get('/api/getUserInfo', async (req, res) => {
+  const { openId } = req.query
+  request({
+    method: 'GET',
+    url: `http://api.weixin.qq.com/cgi-bin/user/info?openid=${openId}&lang=zh_CN`
+  }, function (error, response) {
+    if (error) {
+      console.log('接口错误', error)
+      res.send({
+        code: 500,
+        data: {},
+        msg: '接口报错'
+      })
+    } else {
+      res.send({
+        code: 0,
+        data: {
+          ...JSON.parse(response.body)
+        }
+      })
     }
   })
 })
