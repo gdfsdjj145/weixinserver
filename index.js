@@ -84,15 +84,14 @@ app.all('/wx-text', async (req, res) => {
               msg: '接口报错'
             })
           } else {
-            res.send(`
-              <xml>
-                <ToUserName><![CDATA[${ToUserName}]]></ToUserName>
-                <FromUserName><![CDATA[${FromUserName}]]></FromUserName>
-                <CreateTime>1${CreateTime}</CreateTime>
-                <MsgType><![CDATA[text]]></MsgType>
-                <Content><![CDATA[登录成功]]></Content>
-              </xml>
-              `)
+            sendmess(appid, {
+              touser: FromUserName,
+              msgtype: 'text',
+              text: {
+                content: '登录成功'
+              }
+            })
+            res.send('success')
           }
         })
       }
@@ -176,6 +175,25 @@ app.get('/api/getUserInfo', async (req, res) => {
     }
   })
 })
+
+
+function sendmess (appid, mess) {
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'POST',
+      url: `http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=${appid}`,
+      body: JSON.stringify(mess)
+    }, function (error, response) {
+      if (error) {
+        console.log('接口返回错误', error)
+        reject(error.toString())
+      } else {
+        console.log('接口返回内容', response.body)
+        resolve(response.body)
+      }
+    })
+  })
+}
 
 const port = process.env.PORT || 80;
 
