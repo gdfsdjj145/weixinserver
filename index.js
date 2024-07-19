@@ -67,7 +67,7 @@ app.all('/wx-text', async (req, res) => {
     if (Event === 'subscribe' || Event === 'SCAN') {
       // 登录扫码
       if (EventKey === '666') {
-        request({
+        await request({
           method: 'POST',
           url: 'https://www.wefight.cn/api/wx/code',
           body: JSON.stringify({
@@ -75,16 +75,15 @@ app.all('/wx-text', async (req, res) => {
             openId: FromUserName,
             createTime: CreateTime
           })
-        }, async (error, response) => {
-          await sendmess(appid, {
-            touser: FromUserName,
-            msgtype: 'text',
-            text: {
-              content: '登录成功'
-            }
-          })
-          res.send('success')
         })
+        await sendmess(appid, {
+          touser: FromUserName,
+          msgtype: 'text',
+          text: {
+            content: '登录成功'
+          }
+        })
+        res.send('success')
       }
     }
   }
