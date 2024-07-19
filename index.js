@@ -69,7 +69,7 @@ app.all('/wx-text', async (req, res) => {
       if (EventKey === '666') {
         request({
           method: 'POST',
-          url: 'http://www.wefight.cn/api/wx/code',
+          url: 'https://www.wefight.cn/api/wx/code',
           body: JSON.stringify({
             ticket: Ticket,
             openId: FromUserName,
