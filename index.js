@@ -187,7 +187,35 @@ function parseXML (xmlData) {
 
 // 验证签名
 function verifySignature (xmlData, signature, timestamp, nonce) {
-  const apiKey = 'YOUR_API_KEY'; // 替换为您的微信支付API密钥
+  const apiKey = `-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCtp7XuL1xSl66J
+EGUAzO585H5yNQGVlYP8dPjtPGfX5cZgJ6S+xASLX7fk+srG3VDUtaWKaOGP1Tfy
+ROdlbBycTBvHqPYliXcbOo6AbD1gihBuGYD5jq6xD/MhT6b30VlRdSq+M56XkVYg
+3hB81+JS4T64sEaBk+mX9XUakrEy2GzsAeMDnxkaitarXbw/rCUPEf6oOnaJ8L9w
+dV9IQX6Dc2sBH1LyUbWm4LjnArbUpEJcCbWiJU6XX4hdrkpngVFumG+gOhXM9DFF
+0T4PLe8uqWujkv7ZaUC5YLxW5nS6eVrmKc1dpKOHGGSVjzzjyglBVYj0qIABVyUr
+UwvcDm4zAgMBAAECggEAWktzOOddbQC72z8wFat5cm1pJj9TlJEK8RFtggW/xS4P
+6V2TtzG7XzElMKYLHD5l0kSlUAPbDWwDzDBx1XXSpp6Yb0f2vWvuB7V59WLSw0jm
+5CjUvG6pfR3bAP4mxoMPm2B+GipDE3KZwztUfWXPo+LFN0lJUAU2GDKkcm3GP7YY
+AU3/WiS58GGYJ9xzjJKff5hscDAyvBY2CJaQ77EAJ8E9RG2Gk3nv8WAlw2jvOyam
+ght5HF8JgIb7PVQ4xzU+zTUut9/3HSFLrGipsp1YiK2moieD5FGm8O4XNEo92xkz
+TFjzZMalKd4uGLwjY3jNSTu34LXmVxrRbJidIA+ImQKBgQDZ9uc2PeMFOYE8icj1
+nvUGB4PJDrz88MFjwxnwFpuc9IbM94s0CFKlhZQOsA5VTBI090+tefuc4yVgPYaZ
+nrn3icp9/RrOLzyJzK5bupeEUo3jv9dj9HaiCnbOGI+8bimYu1zmLZa6xT3ugx/K
+mwruqOK7I3aRoanlL4lIucqrVQKBgQDL9WHT0DLofJPkzvpPdVwnLcd39448WP/d
+I8z3HSO8yXU66fAcLAiywZF8JPrOiakj9mhB/Q48vytKnNmRfe65Ou8qDgxseKAo
+KazTcj8GSofo69KT3xlYJR0WzNK0FMHHVtBM9dFjyK/jg2XDE08zdhYyo0nXvSUT
+g7mFxHuDZwKBgG2AsoY4rz4ntrrQSirD8jtWOSoggmfdGHtjQDuzT/iZjMOatc+t
+QsAvjMOYRYsqzZbYjKoNt5AJOfTQ1DeHW8x16EpFh1sAtjxQnWQuKQLsaqZ58d8g
+qR0dfrRp+IRlH/bAYpqtWqV4hHW4YJdsLyDZrhbwaRgfDPi8Wg80cBKFAoGBAIbc
+O9FYizDantfeW/iKO2LUjF4w3GXe22AXugFzzRuZgeBwqwmVvDKmd1JFCWnj8GkN
+Fyb68p0MMs3lJJ9lS6JC6709CM34fL3RwKsXkcDRK0jCFb0c+Z8k+zUGPhRA3Vi3
+eIhKyidWnaasTW9Np0L5w/e7rKnwMUHUCan/n0PlAoGBAMLNH5vVqbmFtVJTxU/I
+Jn4DwbGrU+E9kg6VW+XuMuyNibnrKN9sy7HxhnT4fzE/W8AlYM52TezF+3pShuTD
+UUbU1rZRiqizVcBmnFWCQyZuW1eLBW4W0ZgZOdOUcmaW+DreIgOlHn1kf99BALji
+tidIn6Doccgfw8q+TV3c1b1A
+-----END PRIVATE KEY-----
+`; // 替换为您的微信支付API密钥
   const signStr = `${timestamp}\n${nonce}\n${xmlData}\n`;
   const sign = crypto.createHmac('sha256', apiKey).update(signStr).digest('hex');
   return sign === signature;
