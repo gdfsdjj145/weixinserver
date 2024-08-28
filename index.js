@@ -148,7 +148,7 @@ app.get('/api/getUserInfo', async (req, res) => {
 })
 
 // 微信支付回调
-app.get('/api/wechat-pay-callback', async (req, res) => {
+app.post('/api/wechat-pay-callback', async (req, res) => {
   try {
     const xmlData = await parseXML(req.body);
     const signature = req.headers['wechatpay-signature'];
