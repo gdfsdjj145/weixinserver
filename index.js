@@ -147,16 +147,25 @@ app.get('/api/getUserInfo', async (req, res) => {
   })
 })
 
-// 微信支付回调
-app.post('/api/wechat-pay-callback', async (req, res) => {
+// 微信支付验证
+app.post('/api/wechat-pay-callback', express.raw({ type: 'text/xml' }), async (req, res) => {
   try {
-    const xmlData = await parseXML(req.body);
+    // 将接收到的数据转换为字符串
+    const xmlString = req.body.toString('utf8');
+    console.log('接收到的原始数据:', xmlString);
+
+    // 尝试移除可能存在的BOM（字节顺序标记）
+    const cleanXmlString = xmlString.replace(/^\uFEFF/, '');
+
+    const xmlData = await parseXML(cleanXmlString);
+    console.log('解析后的XML数据:', xmlData);
+
     const signature = req.headers['wechatpay-signature'];
     const timestamp = req.headers['wechatpay-timestamp'];
     const nonce = req.headers['wechatpay-nonce'];
 
     // 验证签名
-    if (verifySignature(req.body, signature, timestamp, nonce)) {
+    if (verifySignature(cleanXmlString, signature, timestamp, nonce)) {
       // 处理支付结果
       const result = await processPaymentResult(xmlData);
 
@@ -170,12 +179,12 @@ app.post('/api/wechat-pay-callback', async (req, res) => {
     console.error('处理微信支付回调时出错:', error);
     res.status(500).send('内部服务器错误');
   }
-})
+});
 
-// 解析XML
-function parseXML (xmlData) {
+// 解析XML数据
+function parseXML (xmlString) {
   return new Promise((resolve, reject) => {
-    xml2js.parseString(xmlData, { explicitArray: false }, (err, result) => {
+    xml2js.parseString(xmlString, { explicitArray: false, trim: true }, (err, result) => {
       if (err) {
         reject(err);
       } else {
